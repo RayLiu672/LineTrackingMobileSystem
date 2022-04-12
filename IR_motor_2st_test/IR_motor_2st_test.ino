@@ -1,12 +1,14 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-// IR sensors left pin and val
-int Ir_Left_Val;
+// IR sensors left pin
 const static int IR_LEFT = 18 ;
-// IR sensors right pin and val
+// IR sensors left val
+int Ir_Left_Val = 0;
+// IR sensors right pin
 const static int IR_RIGHT = 19;
-int Ir_Right_Val;
+// IR sensors right val
+int Ir_Right_Val = 0;
 
 // Motor left
 const static int ENA = 10;
@@ -20,8 +22,12 @@ const static int RIGHT_NEG_CONTROL = 5;
 // Servo Motor
 const static int SERVO_PIN = 7;
 Servo servo_motor;
+int servo_angle = 90;
 
-// Rpm of left and Right motors
+// Servo door control IR sensor
+const static int IR_TOP = 2;
+
+// Initial Rpm of left and Right motors
 int Right_Rpm = 0;
 int Left_Rpm = 0;
 int Dual_Rpm = 0;
@@ -52,37 +58,18 @@ void setup() {
   
   // Servo Motor Pin
   servo_motor.attach(SERVO_PIN);
+  // Set IR_TOP as an interrupt to control servo action
+  attachInterrupt(digitalPinToInterrupt(IR_TOP),ir_servo ,FALLING);
+  // Initialize servo motor to 90°
+  servo_motor.write(90);
 }
 
 void loop() {
-  
-  // IR sensors looking for line
-  Ir_Right_Val = digitalRead(IR_RIGHT);
-  Ir_Left_Val = digitalRead(IR_LEFT);
-
-  // If line is detected
-  if (Ir_Right_Val == 0 || Ir_Left_Val == 0) {
-    // call detected function
-    detected();
-  }
-  else if (Ir_Right_Val == 1 && Ir_Left_Val == 1) {
-    Serial.println("nothing detected");
-    // Forward Motion
-    digitalWrite(LEFT_POS_CONTROL, LOW);
-    digitalWrite(LEFT_NEG_CONTROL, HIGH);
-    digitalWrite(RIGHT_POS_CONTROL, HIGH); 
-    digitalWrite(RIGHT_NEG_CONTROL, LOW);
-
-    // Motor action continues as normal
-    for (Dual_Rpm == Right_Rpm; Dual_Rpm < 256; Dual_Rpm++) {
-      Ir_Right_Val = digitalRead(IR_RIGHT);
-      Ir_Left_Val = digitalRead(IR_LEFT);
-      analogWrite(ENA, Dual_Rpm);
-      analogWrite(ENB, Dual_Rpm);
-      delay(20);
-      if (Ir_Right_Val == 0 || Ir_Left_Val == 0) {
-        break;
-      }
+  // check if the servo motor is closed or open
+  servo_angle = servo_motor.read();
+  // When the servo angle is 0(door closed)
+  if(servo_angle == 0){
+    // Start processing IR right/left sensor signal
+     ir_sensor();
     }
-  }
 }
