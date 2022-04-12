@@ -31,7 +31,7 @@ void setup() {
   pinMode(RIGHT_NEG_CONTROL, OUTPUT);
 
   // initialize motor as LOW
-  digitalWrite(LEFT_POS_CONTROL, LOW);
+  digitalWrite(LEFT_POS_CONTROL, LOW);29--
   digitalWrite(LEFT_NEG_CONTROL, LOW);
   digitalWrite(RIGHT_POS_CONTROL, LOW);
   digitalWrite(RIGHT_NEG_CONTROL, LOW);
