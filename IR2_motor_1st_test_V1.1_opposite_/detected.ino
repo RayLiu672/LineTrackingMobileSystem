@@ -1,6 +1,6 @@
 void detected(){
   // IR sensor left and right triggered
-  if(Ir_Right_Val == 0 && Ir_Left_Val == 0){
+  if(Ir_Right_Val == 1 && Ir_Left_Val == 1){
     
     Serial.println("both detected");
     // Turning both motors off
@@ -11,10 +11,10 @@ void detected(){
   }
   
   // IR sensor right triggered
-  else if(Ir_Right_Val == 0 && Ir_Left_Val == 1){    
+  else if(Ir_Right_Val == 1 && Ir_Left_Val == 0){    
     Serial.println("right detected");
      // Right stop
-    analogWrite(ENB, 0);
+    analogWrite(ENB, 45);
     
     // Forward Motion
     digitalWrite(LEFT_POS_CONTROL, HIGH);
@@ -34,13 +34,13 @@ void detected(){
         //Increase the Left motor RPM
         analogWrite(ENA, Left_Rpm);
       }    
-      Serial.println(Left_Rpm);
+      analogWrite(ENA, 255);
       delay(20);
       }      
     }
     
   // IR sensor left triggered  
-  else if(Ir_Right_Val == 1 && Ir_Left_Val == 0){ 
+  else if(Ir_Right_Val == 0 && Ir_Left_Val == 1){ 
     Serial.println("left detected");
     // left stop
     analogWrite(ENA, 0);
@@ -63,8 +63,8 @@ void detected(){
         Right_Rpm++;
         analogWrite(ENB, Right_Rpm);
       }
-      //Increase the Right motor RPM 
-      Serial.println(Right_Rpm);    
+      analogWrite(ENB, 255);
+      //Increase the Right motor RPM    
       delay(20);
       }             
     }

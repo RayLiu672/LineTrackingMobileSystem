@@ -66,7 +66,6 @@ void loop() {
     digitalWrite(LEFT_NEG_CONTROL, LOW);
     digitalWrite(RIGHT_POS_CONTROL, LOW);
     digitalWrite(RIGHT_NEG_CONTROL, HIGH);
-    // 
     while(Ir_Right_Val == 0 && Ir_Left_Val == 0){     
       // IR sensors looking for line
       Ir_Right_Val = digitalRead(IR_RIGHT);
@@ -79,7 +78,6 @@ void loop() {
         analogWrite(ENA, Dual_Rpm);
         analogWrite(ENB, Dual_Rpm);
       }
-      Serial.println(Dual_Rpm);
       delay(20);
       }
   }  
