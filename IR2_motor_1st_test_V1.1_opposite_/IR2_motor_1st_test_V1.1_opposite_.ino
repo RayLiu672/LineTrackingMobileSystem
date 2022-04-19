@@ -16,10 +16,8 @@ const static int ENB = 11;
 const static int RIGHT_POS_CONTROL = 6;
 const static int RIGHT_NEG_CONTROL = 5;
 
-// Rpm of left and Right motors
 int Right_Rpm = 100;
 int Left_Rpm = 100;
-
   
 void setup() {
   // Communcation with Serial Console
@@ -45,9 +43,10 @@ void setup() {
 }
 
 void loop() {
+  // Rpm of left and Right motors
   int Dual_Rpm = 100;
-  int Right_Rpm = 100;
-  int Left_Rpm = 100;
+  Right_Rpm = 100;
+  Left_Rpm = 100;
   // IR sensors looking for line
   Ir_Right_Val = digitalRead(IR_RIGHT);
   Ir_Left_Val = digitalRead(IR_LEFT);
@@ -55,10 +54,10 @@ void loop() {
   Serial.println(Ir_Left_Val);
   // If line is detected
   if(Ir_Right_Val == 1 || Ir_Left_Val == 1){
-    Serial.println("detected");
     // call detected function
     detected();
     }
+  // // If both Ir sensors do not detect the line
   else if(Ir_Right_Val == 0 && Ir_Left_Val == 0){
     Serial.println("nothing detected");
     // Forward Motion
@@ -66,13 +65,14 @@ void loop() {
     digitalWrite(LEFT_NEG_CONTROL, LOW);
     digitalWrite(RIGHT_POS_CONTROL, LOW);
     digitalWrite(RIGHT_NEG_CONTROL, HIGH);
+    // continue executing while both Ir sensors do not see the line
     while(Ir_Right_Val == 0 && Ir_Left_Val == 0){     
       // IR sensors looking for line
       Ir_Right_Val = digitalRead(IR_RIGHT);
       Ir_Left_Val = digitalRead(IR_LEFT);
       Serial.println(Ir_Right_Val);
       Serial.println(Ir_Left_Val);
-      // Motor speed increase(calibrate) -------------------------------------needs adjusting-------------------------------------------------
+      // ramping Rpm for both motors
       if(Dual_Rpm < 255){
         Dual_Rpm ++ ; 
         analogWrite(ENA, Dual_Rpm);

@@ -10,11 +10,11 @@ void detected(){
     digitalWrite(RIGHT_NEG_CONTROL, LOW);
   }
   
-  // IR sensor right triggered
-  else if(Ir_Right_Val == 1 && Ir_Left_Val == 0){    
-    Serial.println("right detected");
-     // Right stop
-    analogWrite(ENB, 45);
+  // When left Ir sees line
+  else if(Ir_Right_Val == 0 && Ir_Left_Val == 1){    
+    Serial.println("left detected");
+    // decrease speed of right motor
+    analogWrite(ENA, 0); //-----------------
     
     // Forward Motion
     digitalWrite(LEFT_POS_CONTROL, HIGH);
@@ -22,36 +22,37 @@ void detected(){
     digitalWrite(RIGHT_POS_CONTROL, LOW);
     digitalWrite(RIGHT_NEG_CONTROL, HIGH); 
     
-    // increase Left motor Rpm  ------------------------------------------------------------------------------- Take a look a while loop condition ----------------------------------------
-    while(Ir_Right_Val == 0){
+    // increase Left motor Rpm  
+    while(Ir_Left_Val == 1){
+      // IR sensors looking for line
       Ir_Left_Val = digitalRead(IR_LEFT);
       Ir_Right_Val = digitalRead(IR_RIGHT); 
       if(Ir_Left_Val == 0){
+        // leave loop if 
         break;
         }
-      if(Left_Rpm < 255){
-        Left_Rpm++; 
+      if(Right_Rpm < 255){
+        Right_Rpm++; 
         //Increase the Left motor RPM
-        analogWrite(ENA, Left_Rpm);
+        analogWrite(ENB, Right_Rpm);
       }    
-      analogWrite(ENA, 255);
+      analogWrite(ENB, 255);
       delay(20);
       }      
     }
-    
-  // IR sensor left triggered  
-  else if(Ir_Right_Val == 0 && Ir_Left_Val == 1){ 
-    Serial.println("left detected");
+
+  // When right Ir sees line
+  else if(Ir_Right_Val == 1 && Ir_Left_Val == 0){ 
+    Serial.println("right detected");
     // left stop
-    analogWrite(ENA, 0);
+    analogWrite(ENB, 0);
     // Forward Motion
     digitalWrite(LEFT_POS_CONTROL, HIGH);
     digitalWrite(LEFT_NEG_CONTROL, LOW);
     digitalWrite(RIGHT_POS_CONTROL, LOW);
     digitalWrite(RIGHT_NEG_CONTROL, HIGH);
     
-    // increase Right motor Rpm ------------------------------------------------------------------------------- Take a look a while loop condition ----------------------------------------
-    while(Ir_Left_Val == 0){
+    while(Ir_Right_Val == 1){
       // Check if robot returned to line
       Ir_Left_Val = digitalRead(IR_LEFT);
       Ir_Right_Val = digitalRead(IR_RIGHT);
@@ -61,9 +62,9 @@ void detected(){
       // Increase Right_Rpm
       if(Right_Rpm < 255){
         Right_Rpm++;
-        analogWrite(ENB, Right_Rpm);
+        analogWrite(ENA, Right_Rpm);
       }
-      analogWrite(ENB, 255);
+      analogWrite(ENA, 255);
       //Increase the Right motor RPM    
       delay(20);
       }             
