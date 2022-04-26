@@ -15,7 +15,7 @@ const static int LEFT_NEG_CONTROL = 8;
 const static int ENB = 11;
 const static int RIGHT_POS_CONTROL = 6;
 const static int RIGHT_NEG_CONTROL = 5;
-
+// Initialize speed
 int Right_Rpm = 100;
 int Left_Rpm = 100;
 

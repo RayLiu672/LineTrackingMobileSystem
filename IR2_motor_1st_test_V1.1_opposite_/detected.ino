@@ -1,6 +1,6 @@
 void detected(){
   // IR sensor left and right triggered
-  if(Ir_Right_Val == 1 && Ir_Left_Val == 1){
+  if(Ir_Right_Val == 0 && Ir_Left_Val == 0){
     
     Serial.println("both detected");
     // Turning both motors off
@@ -10,9 +10,9 @@ void detected(){
     digitalWrite(RIGHT_NEG_CONTROL, LOW);
   }
   
-  // When left Ir sees line
+  // When right Ir sees line
   else if(Ir_Right_Val == 0 && Ir_Left_Val == 1){    
-    Serial.println("left detected");
+    Serial.println("right detected");
     // decrease speed of right motor
     analogWrite(ENA, 0); //-----------------
     
@@ -23,11 +23,11 @@ void detected(){
     digitalWrite(RIGHT_NEG_CONTROL, HIGH); 
     
     // increase Left motor Rpm  
-    while(Ir_Left_Val == 1){
+    while(Ir_Right_Val == 0){
       // IR sensors looking for line
       Ir_Left_Val = digitalRead(IR_LEFT);
       Ir_Right_Val = digitalRead(IR_RIGHT); 
-      if(Ir_Left_Val == 0){
+      if(Ir_Right_Val == 1){
         // leave loop if 
         break;
         }
@@ -41,9 +41,9 @@ void detected(){
       }      
     }
 
-  // When right Ir sees line
+  // When left Ir sees line
   else if(Ir_Right_Val == 1 && Ir_Left_Val == 0){ 
-    Serial.println("right detected");
+    Serial.println("left detected");
     // left stop
     analogWrite(ENB, 0);
     // Forward Motion
@@ -52,11 +52,11 @@ void detected(){
     digitalWrite(RIGHT_POS_CONTROL, LOW);
     digitalWrite(RIGHT_NEG_CONTROL, HIGH);
     
-    while(Ir_Right_Val == 1){
+    while(Ir_Left_Val == 0){
       // Check if robot returned to line
       Ir_Left_Val = digitalRead(IR_LEFT);
       Ir_Right_Val = digitalRead(IR_RIGHT);
-      if(Ir_Right_Val == 0){
+      if(Ir_Left_Val == 1){
         break;
         }
       // Increase Right_Rpm

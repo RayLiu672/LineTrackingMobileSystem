@@ -53,12 +53,12 @@ void loop() {
   Serial.println(Ir_Right_Val);
   Serial.println(Ir_Left_Val);
   // If line is detected
-  if(Ir_Right_Val == 1 || Ir_Left_Val == 1){
+  if(Ir_Right_Val == 0 || Ir_Left_Val == 0){
     // call detected function
     detected();
     }
   // // If both Ir sensors do not detect the line
-  else if(Ir_Right_Val == 0 && Ir_Left_Val == 0){
+  else if(Ir_Right_Val == 1 && Ir_Left_Val == 1){
     Serial.println("nothing detected");
     // Forward Motion
     digitalWrite(LEFT_POS_CONTROL, HIGH);
@@ -66,7 +66,7 @@ void loop() {
     digitalWrite(RIGHT_POS_CONTROL, LOW);
     digitalWrite(RIGHT_NEG_CONTROL, HIGH);
     // continue executing while both Ir sensors do not see the line
-    while(Ir_Right_Val == 0 && Ir_Left_Val == 0){     
+    while(Ir_Right_Val == 1 && Ir_Left_Val == 1){     
       // IR sensors looking for line
       Ir_Right_Val = digitalRead(IR_RIGHT);
       Ir_Left_Val = digitalRead(IR_LEFT);
